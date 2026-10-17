@@ -1,9 +1,20 @@
 # FreqUI
 
 [![Open in Visual Studio Code](https://img.shields.io/static/v1?logo=visualstudiocode&label=&message=Open%20in%20Visual%20Studio%20Code&labelColor=2c2c32&color=007acc&logoColor=007acc)](https://vscode.dev/github/freqtrade/frequi)
-[![FreqUI CI](https://github.com/freqtrade/frequi/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/freqtrade/frequi/actions/)
+[![FreqUI CI](https://github.com/freqtrade/freqtrade/actions/workflows/ci.yml/badge.svg)](https://github.com/freqtrade/freqtrade/actions/)
+
+> **中文說明（繁體）**：[README.zh.md](README.zh.md)
 
 Freqtrade UI build with [Vue.js](https://vuejs.org/) and [primevue](https://primevue.org/).
+
+This is a community fork of [FreqUI](https://github.com/freqtrade/frequi) with full **Chinese localization (i18n)** built on top of the official 3.1.3 release (tag `f2d57c3efd55d9fb66e60b2dfc2e650b6b601185`). The interface defaults to Traditional Chinese, with English fallback. See [README.zh.md](README.zh.md) for details.
+
+## 中文版特性 (Chinese localization features)
+
+- 基於官方 FreqUI 3.1.3 fork，透過 vue-i18n 加入完整中文化（無需修改官方元件邏輯）
+- 預設繁體中文介面，英文作為 fallback
+- 涵蓋：登入、交易列表、儀表板、持倉/歷史、交易對、圖表、回測、分析、資料下載、設定等全部頁面
+- 分批逐步中文化（Batch 1~5），每一批獨立 build / deploy / commit
 
 ## Run this project
 
