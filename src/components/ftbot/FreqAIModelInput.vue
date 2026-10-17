@@ -1,28 +1,30 @@
 <script setup lang="ts">
 import type { BacktestFreqAIInput } from '@/types';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const freqAI = defineModel<BacktestFreqAIInput>({ required: true });
 </script>
 
 <template>
   <div class="flex justify-end items-center">
-    <span class="me-2">Enable FreqAI:</span>
+    <span class="me-2">{{ t('freqAIModelInput.enableFreqAI') }}:</span>
     <InfoBox
-      hint="Assumes freqAI configuration is setup in the configuration, and the strategy is a freqAI strategy. Will fail if that's not the case."
+      :hint="t('freqAIModelInput.hint')"
     />
   </div>
   <BaseCheckbox id="enable-freqai" v-model="freqAI.enabled"></BaseCheckbox>
 
   <template v-if="freqAI.enabled">
-    <label for="freqai-identifier">FreqAI identifier:</label>
+    <label for="freqai-identifier">{{ t('freqAIModelInput.identifier') }}:</label>
     <UInput
       id="freqai-identifier"
       v-model="freqAI.identifier"
-      placeholder="Use config default"
+      :placeholder="t('freqAIModelInput.useConfigDefault')"
     ></UInput>
   </template>
   <template v-if="freqAI.enabled">
-    <label for="freqai-model">FreqAI Model:</label>
+    <label for="freqai-model">{{ t('freqAIModelInput.model') }}:</label>
     <FreqaiModelSelect id="freqai-model" v-model="freqAI.model"></FreqaiModelSelect>
   </template>
 </template>

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { StrategyResult } from '@/types';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const props = defineProps<{
   strategy: StrategyResult;
 }>();
@@ -27,7 +29,7 @@ const sortedParamsBySpace = computed<Record<string, typeof props.strategy.params
 <template>
   <div v-if="strategy.params && strategy.params.length > 0" class="text-start">
     <div v-for="(params, space) in sortedParamsBySpace" :key="space" class="mb-4">
-      <h3 class="text-md font-bold underline mb-2" :title="`Space ${space}`">{{ space }}</h3>
+      <h3 class="text-md font-bold underline mb-2" :title="t('strategyParams.space', { space })">{{ space }}</h3>
       <div
         v-for="param in params"
         :key="param.name"
@@ -40,6 +42,6 @@ const sortedParamsBySpace = computed<Record<string, typeof props.strategy.params
     </div>
   </div>
   <div v-else class="p-4">
-    <p>This strategy has no parameters.</p>
+    <p>{{ t('strategyParams.noParams') }}</p>
   </div>
 </template>

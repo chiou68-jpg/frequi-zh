@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import ECharts from 'vue-echarts';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 // import { EChartsOption } from 'echarts';
 
 import { use } from 'echarts/core';
@@ -61,7 +64,7 @@ const marketChangeOptions: ComputedRef<EChartsOption> = computed(() => {
   const colRelMean = props.marketChangeData.columns.findIndex((el) => el === 'rel_mean');
   return {
     title: {
-      text: 'Market change %',
+      text: t('chartTitles.marketChange'),
       left: 'center',
       show: props.showTitle,
     },

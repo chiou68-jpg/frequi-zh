@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import type { EChartsOption } from 'echarts';
 import ECharts from 'vue-echarts';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 import { BarChart, LineChart } from 'echarts/charts';
 import {
@@ -210,7 +213,7 @@ const cumProfitChartOptions: ComputedRefWithControl<EChartsOption> = computedWit
   () => {
     const chartOptionsLoc: EChartsOption = {
       title: {
-        text: 'Cumulative Profit',
+        text: t('chartTitles.cumulativeProfit'),
         left: 'center',
         show: props.showTitle,
       },

@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import ECharts from 'vue-echarts';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 // import { EChartsOption } from 'echarts';
 import { format as echartsFormat } from 'echarts';
 
@@ -101,7 +104,7 @@ const colorStops: LinearGradientObject = {
 const dailyChartOptions: ComputedRef<EChartsOption> = computed(() => {
   return {
     title: {
-      text: 'Daily profit',
+      text: t('chartTitles.dailyProfit'),
       show: props.showTitle,
     },
     backgroundColor: 'rgba(0, 0, 0, 0)',

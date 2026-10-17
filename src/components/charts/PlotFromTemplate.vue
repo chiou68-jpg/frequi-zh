@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 const visible = defineModel<boolean>('visible');
 defineProps<{
   columns: string[];
@@ -45,7 +48,7 @@ const showIndicatorMapping = ref(false);
 
 <template>
   <div v-if="visible" class="pt-1">
-    <UFormField v-if="!showIndicatorMapping" label="Select Template" class="text-md">
+    <UFormField v-if="!showIndicatorMapping" :label="t('plotTemplate.selectTemplate')" class="text-md">
       <UListbox
         id="selectTemplate"
         class="rounded ring ring-accented"
@@ -61,7 +64,7 @@ const showIndicatorMapping = ref(false);
       </UListbox>
     </UFormField>
     <div v-else>
-      <h5 class="mt-1 text-center text-md mb-1">Re-map indicators</h5>
+      <h5 class="mt-1 text-center text-md mb-1">{{ t('plotTemplate.remapIndicators') }}</h5>
       <div
         v-for="indicator in Object.keys(indicatorMap)"
         :key="indicator"
@@ -78,12 +81,12 @@ const showIndicatorMapping = ref(false);
       </div>
     </div>
     <div class="mt-2 flex gap-1 justify-end">
-      <UButton title="Abort" color="neutral" icon="mdi:close" @click="visible = false" />
+      <UButton :title="t('plotTemplate.abort')" color="neutral" icon="mdi:close" @click="visible = false" />
       <UButton
         v-if="!showIndicatorMapping"
         :disabled="!selTemplateName"
-        title="Use template"
-        label=" Use Template"
+        :title="t('plotTemplate.useTemplate')"
+        :label="t('plotTemplate.useTemplateLabel')"
         class="w-40"
         variant="solid"
         icon="mdi:check"
@@ -92,12 +95,12 @@ const showIndicatorMapping = ref(false);
       <UButton
         v-if="showIndicatorMapping"
         :disabled="!selTemplateName"
-        title="Apply template"
+        :title="t('plotTemplate.applyTemplate')"
         class="w-40"
         variant="solid"
         icon="mdi:check"
         @click="fromTemplateApply"
-        label="Apply Template"
+        :label="t('plotTemplate.applyTemplateLabel')"
       />
     </div>
   </div>

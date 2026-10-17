@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { h, resolveComponent } from 'vue';
 import type { BacktestResultInMemory } from '@/types';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const props = withDefaults(
   defineProps<{
     backtestResults: Record<string, BacktestResultInMemory>;
@@ -21,7 +23,7 @@ const backtestResultStats = computed(() => {
 });
 
 const backtestResultFields = computed(() => {
-  const res = [{ key: 'metric', label: 'Metric' }];
+  const res = [{ key: 'metric', label: t('backtestComparison.metric') }];
   Object.entries(props.backtestResults).forEach(([key, value]) => {
     res.push({ key, label: value.metadata.strategyName });
   });
@@ -48,7 +50,7 @@ const tableColumns = computed(() => {
 <template>
   <div class="px-0 mw-full">
     <div class="flex justify-center">
-      <h3 class="font-bold text-3xl">Backtest-result comparison</h3>
+      <h3 class="font-bold text-3xl">{{ t('backtestComparison.title') }}</h3>
     </div>
     <div class="flex flex-col text-start ms-0 me-2 gap-2">
       <div class="flex flex-col flex-xl-row">

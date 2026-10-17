@@ -3,6 +3,9 @@ import ECharts from 'vue-echarts';
 import type { ClosedTrade } from '@/types';
 import type { EChartsOption } from 'echarts';
 import { format as echartsFormat } from 'echarts';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 import { use } from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
@@ -70,7 +73,7 @@ const losingTrades = computed(() => {
 const chartOptions = computed((): EChartsOption => {
   return {
     title: {
-      text: 'Trades durations',
+      text: t('chartTitles.tradeDurations'),
       left: 'center',
       show: props.showTitle,
     },

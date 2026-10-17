@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import EditValue from '../general/EditValue.vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 const pairlistStore = usePairlistConfigStore();
 </script>
 <template>
   <div class="flex flex-col sm:flex-row mb-2 gap-2">
     <UButton
-      title="Save configuration"
+      :title="t('pairlistConfigActions.saveConfig')"
       variant="solid"
       icon="mdi:content-save"
       @click="pairlistStore.saveConfig(pairlistStore.config.name)"
@@ -30,12 +33,12 @@ const pairlistStore = usePairlistConfigStore();
       />
     </EditValue>
     <UButton
-      title="Evaluate pairlist"
+      :title="t('pairlistConfigActions.evaluatePairlist')"
       :disabled="pairlistStore.evaluating || !pairlistStore.pairlistValid"
       variant="solid"
       @click="pairlistStore.startPairlistEvaluation()"
       :loading="pairlistStore.evaluating"
-      label="Evaluate"
+      :label="t('pairlistConfigActions.evaluate')"
       icon="mdi:play-box-outline"
     />
   </div>

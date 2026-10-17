@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { CalendarDate, Time } from '@internationalized/date';
 import type { DateValue, TimeValue } from 'reka-ui';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const now = new Date();
 const maxDateNow = new CalendarDate(now.getFullYear(), now.getMonth() + 1, now.getDate());
 const maxDateTomorrow = maxDateNow.add({ days: 1 });
@@ -120,13 +122,13 @@ onMounted(() => {
   <div>
     <div class="flex gap-2">
       <div class="flex flex-1 min-w-0 gap-1">
-        <UFormField label="Start Date" class="flex-1 min-w-0">
+        <UFormField :label="t('timeRange.startDate')" class="flex-1 min-w-0">
           <UInputDate
             v-model="dateFrom"
             :locale="dateLocale"
             :max-value="maxDateNow"
             :ui="{ base: 'pe-14' }"
-            title="Start date (yyyy-mm-dd, UTC)"
+            :title="t('timeRange.startDateTitle')"
           >
             <template #trailing>
               <UButton
@@ -135,7 +137,7 @@ onMounted(() => {
                 color="neutral"
                 variant="ghost"
                 size="xs"
-                title="Clear start date"
+                :title="t('timeRange.clearStartDate')"
                 @click="dateFrom = null"
               />
               <UPopover v-model:open="popoverFromOpen">
@@ -151,12 +153,12 @@ onMounted(() => {
             </template>
           </UInputDate>
         </UFormField>
-        <UFormField v-if="useTime" label="Time">
+        <UFormField v-if="useTime" :label="t('timeRange.time')">
           <UInputTime
             v-model="timeFrom"
             :hour-cycle="24"
             :granularity="granularity"
-            title="Start time (UTC)"
+            :title="t('timeRange.startTime')"
           >
             <template #trailing>
               <UButton
@@ -165,7 +167,7 @@ onMounted(() => {
                 color="neutral"
                 variant="ghost"
                 size="xs"
-                title="Clear start time"
+                :title="t('timeRange.clearStartTime')"
                 @click="timeFrom = null"
               />
             </template>
@@ -173,13 +175,13 @@ onMounted(() => {
         </UFormField>
       </div>
       <div class="flex flex-1 min-w-0 gap-1">
-        <UFormField label="End Date" class="flex-1 min-w-0">
+        <UFormField :label="t('timeRange.endDate')" class="flex-1 min-w-0">
           <UInputDate
             v-model="dateTo"
             :locale="dateLocale"
             :max-value="maxDateTomorrow"
             :ui="{ base: 'pe-14' }"
-            title="End date (yyyy-mm-dd, UTC)"
+            :title="t('timeRange.endDateTitle')"
           >
             <template #trailing>
               <UButton
@@ -188,7 +190,7 @@ onMounted(() => {
                 color="neutral"
                 variant="ghost"
                 size="xs"
-                title="Clear end date"
+                :title="t('timeRange.clearEndDate')"
                 @click="dateTo = null"
               />
               <UPopover v-model:open="popoverToOpen">
@@ -204,12 +206,12 @@ onMounted(() => {
             </template>
           </UInputDate>
         </UFormField>
-        <UFormField v-if="useTime" label="Time">
+        <UFormField v-if="useTime" :label="t('timeRange.time')">
           <UInputTime
             v-model="timeTo"
             :hour-cycle="24"
             :granularity="granularity"
-            title="End time (UTC)"
+            :title="t('timeRange.endTime')"
           >
             <template #trailing>
               <UButton
@@ -218,7 +220,7 @@ onMounted(() => {
                 color="neutral"
                 variant="ghost"
                 size="xs"
-                title="Clear end time"
+                :title="t('timeRange.clearEndTime')"
                 @click="timeTo = null"
               /> </template
           ></UInputTime>
@@ -230,12 +232,12 @@ onMounted(() => {
       <BaseCheckbox
         v-if="canUseTime"
         v-model="withTime"
-        title="Select the timerange with hour/minute precision (in UTC)"
+        :title="t('timeRange.useTimeTitle')"
       >
-        Use time
+        {{ t('timeRange.useTime') }}
       </BaseCheckbox>
       <div class="text-start">
-        Timerange: <b>{{ timeRange }}</b>
+        {{ t('timeRange.timerange') }}: <b>{{ timeRange }}</b>
       </div>
     </div>
   </div>

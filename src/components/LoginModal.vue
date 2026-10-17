@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { AuthStorageWithBotId } from '@/types';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 export interface LoginModalProps {
   loginInfo?: AuthStorageWithBotId;
 }
@@ -19,7 +21,7 @@ function loginResult(result: boolean) {
 </script>
 
 <template>
-  <UModal title="Login to your bot" description="Enter your bot credentials to connect">
+  <UModal :title="t('loginModal.title')" :description="t('loginModal.desc')">
     <template #body>
       <BotLogin in-modal :existing-auth="loginInfo" @login-result="loginResult" />
     </template>

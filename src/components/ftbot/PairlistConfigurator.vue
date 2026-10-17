@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import type { Pairlist } from '@/types';
 import { useSortable, moveArrayElement } from '@vueuse/integrations/useSortable';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const botStore = useBotStore();
 const pairlistStore = usePairlistConfigStore();
 
@@ -110,13 +112,13 @@ if (pairlistStore.whitelist.length > 0) {
       <PairlistConfigActions />
       <div class="border rounded-sm border-neutral-500 p-2 mb-2">
         <div class="flex items-center gap-2 my-2">
-          <span class="col-auto">Stake currency: </span>
+          <span class="col-auto">{{ t('pairlistConfig.stakeCurrency') }}: </span>
           <UInput v-model="pairlistStore.stakeCurrency" />
         </div>
 
         <div class="mb-2 border rounded-sm border-neutral-500 p-2 text-start">
           <BaseCheckbox v-model="pairlistStore.customExchange" class="mb-2">
-            Custom Exchange
+            {{ t('pairlistConfig.customExchange') }}
           </BaseCheckbox>
           <Transition name="fade">
             <ExchangeSelect
@@ -131,15 +133,17 @@ if (pairlistStore.whitelist.length > 0) {
         v-if="pairlistStore.config.pairlists.length > 0 && !pairlistStore.firstPairlistIsGenerator"
         class="my-2"
         color="warning"
-        title="Invalid configuration"
-        description="The first entry in the pairlist must be a Generating pairlist, like StaticPairList or
-          VolumePairList."
+        :title="t('pairlistConfig.invalidConfig')"
+        :description="t('pairlistConfig.invalidConfigDesc')"
       />
       <div
         ref="pairlistConfigsEl"
         class="flex flex-col grow relative border rounded-sm border-neutral-500 p-1 gap-2 min-h-32"
         :class="{ empty: configEmpty }"
       >
+        <span v-if="configEmpty" class="self-center uppercase text-sm text-muted">{{
+          t('pairlistConfig.dragHere')
+        }}</span>
         <PairlistConfigItem
           v-for="(pairlist, i) in pairlistStore.config.pairlists"
           :key="pairlist.id"
@@ -153,12 +157,16 @@ if (pairlistStore.whitelist.length > 0) {
       <USegmentedControl
         v-model="selectedView"
         class="mb-2"
-        label-key="value"
+        label-key="label"
         value-key="value"
         size="md"
         :items="[
-          { value: 'Config' },
-          { value: 'Results', disabled: pairlistStore.whitelist.length === 0 },
+          { value: 'Config', label: t('pairlistConfig.config') },
+          {
+            value: 'Results',
+            label: t('pairlistConfig.results'),
+            disabled: pairlistStore.whitelist.length === 0,
+          },
         ]"
         disabled-key="disabled"
       >
@@ -180,14 +188,4 @@ if (pairlistStore.whitelist.length > 0) {
   </div>
 </template>
 
-<style lang="scss" scoped>
-.empty:after {
-  content: 'Drag pairlist here';
-  position: absolute;
-  align-self: center;
-  font-size: 1.1rem;
-  text-transform: uppercase;
-  line-height: 0;
-  top: 50%;
-}
-</style>
+<style lang="scss" scoped></style>

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { BacktestResultInMemory, BacktestResultUpdate } from '@/types';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 withDefaults(
   defineProps<{
     backtestHistory: Record<string, BacktestResultInMemory>;
@@ -34,7 +36,7 @@ function confirmInput(run_id: string, result: BacktestResultInMemory) {
 
 <template>
   <div class="flex flex-col items-stretch">
-    <h3 class="font-bold text-2xl">Available results:</h3>
+    <h3 class="font-bold text-2xl">{{ t('backtestSelect.availableResults') }}:</h3>
     <ul
       class="ms-2 divide-y border-x border-neutral-500 rounded-sm border-y divide-solid divide-neutral-500"
     >
@@ -56,7 +58,7 @@ function confirmInput(run_id: string, result: BacktestResultInMemory) {
               class="flex-nowrap"
               size="sm"
               color="neutral"
-              title="Modify result notes."
+              :title="t('backtestSelect.modifyNotes')"
               icon="mdi:pencil"
               @click.stop="result.metadata.editing = !result.metadata.editing"
             />
@@ -64,17 +66,17 @@ function confirmInput(run_id: string, result: BacktestResultInMemory) {
               size="sm"
               class="flex-nowrap"
               color="neutral"
-              title="Unload this Result from UI."
+              :title="t('backtestSelect.unloadResult')"
               icon="mdi:close"
               @click.stop="$emit('removeResult', key)"
             />
           </div>
         </template>
         <template v-if="result.metadata.editing">
-          <UTextarea v-model="result.metadata.notes" placeholder="notes" size="sm"> </UTextarea>
+          <UTextarea v-model="result.metadata.notes" :placeholder="t('backtestSelect.notes')" size="sm"> </UTextarea>
           <UButton
             size="sm"
-            title="Confirm"
+            :title="t('backtestSelect.confirm')"
             variant="solid"
             color="neutral"
             icon="mdi:check"

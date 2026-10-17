@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { RecursiveAnalysisPayload } from '@/types';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const props = defineProps<{
   running: boolean;
 }>();
@@ -44,37 +46,33 @@ onMounted(() => {
     <UAlert
       color="info"
       class="mb-3 py-2"
-      title="Recursive analysis"
-      description="Checks your strategy's indicators for recursive formula issues by comparing
-        indicator values calculated with different startup candle counts. Indicators that show a
-        difference are likely affected by the amount of startup data and may produce inconsistent
-        results between backtesting and dry/live runs."
+      :title="t('recursiveForm.title')"
+      :description="t('recursiveForm.desc')"
     />
 
     <div class="flex flex-col gap-3">
       <div>
-        <span class="font-bold">Strategy</span>
+        <span class="font-bold">{{ t('recursiveForm.strategy') }}</span>
         <StrategySelect v-model="btStore.strategy" />
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-3 items-center">
-        <label for="recursive-timeframe">Timeframe:</label>
+        <label for="recursive-timeframe">{{ t('recursiveForm.timeframe') }}:</label>
         <TimeframeSelect id="recursive-timeframe" v-model="btStore.selectedTimeframe" />
       </div>
 
       <div class="border dark:border-neutral-700 border-neutral-300 rounded-sm p-2">
         <div class="flex items-center gap-2">
-          <label for="recursive-startup-candles" class="font-bold">Startup candle counts:</label>
+          <label for="recursive-startup-candles" class="font-bold">{{ t('recursiveForm.startupCandles') }}:</label>
           <InfoBox
-            hint="Comma separated list of startup candle counts to compare against each other.
-              Leave empty to use the backend defaults."
+            :hint="t('recursiveForm.startupCandlesHint')"
           />
         </div>
         <UInput
           id="recursive-startup-candles"
           v-model="btStore.recursiveStartupCandleInput"
           class="w-full mt-1"
-          placeholder="e.g. 199,399,499,999,1999"
+          :placeholder="t('recursiveForm.startupCandlesPlaceholder')"
         />
       </div>
 
@@ -92,7 +90,7 @@ onMounted(() => {
           :disabled="!canStart"
           @click="emitStart"
         >
-          Start recursive analysis
+          {{ t('recursiveForm.start') }}
         </UButton>
       </div>
     </div>

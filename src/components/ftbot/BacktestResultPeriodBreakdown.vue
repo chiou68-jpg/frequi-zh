@@ -1,22 +1,24 @@
 <script setup lang="ts">
 import type { PeriodicBreakdown } from '@/types';
 import type { TableColumn } from '@nuxt/ui';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const props = defineProps<{
   periodicBreakdown: PeriodicBreakdown;
 }>();
 
 const periodicBreakdownSelections = computed(() => {
   const res = [
-    { value: 'day', label: 'Days' },
-    { value: 'week', label: 'Weeks' },
-    { value: 'month', label: 'Months' },
+    { value: 'day', label: t('periodBreakdown.days') },
+    { value: 'week', label: t('periodBreakdown.weeks') },
+    { value: 'month', label: t('periodBreakdown.months') },
   ];
   if (props.periodicBreakdown.year) {
-    res.push({ value: 'year', label: 'Years' });
+    res.push({ value: 'year', label: t('periodBreakdown.years') });
   }
   if (props.periodicBreakdown.weekday) {
-    res.push({ value: 'weekday', label: 'Weekday' });
+    res.push({ value: 'weekday', label: t('periodBreakdown.weekday') });
   }
 
   return res;
@@ -36,14 +38,14 @@ type PeriodRow = {
 };
 
 const columns: TableColumn<PeriodRow>[] = [
-  { accessorKey: 'date', header: 'Date' },
-  { accessorKey: 'trades', header: 'Trades' },
-  { accessorKey: 'profit_abs', header: 'Total Profit' },
-  { accessorKey: 'profit_factor', header: 'Profit Factor' },
-  { accessorKey: 'wins', header: 'Wins' },
-  { accessorKey: 'draws', header: 'Draws' },
-  { accessorKey: 'losses', header: 'Losses' },
-  { id: 'win_rate', header: 'Win Rate' },
+  { accessorKey: 'date', header: t('periodBreakdown.date') },
+  { accessorKey: 'trades', header: t('periodBreakdown.trades') },
+  { accessorKey: 'profit_abs', header: t('periodBreakdown.totalProfit') },
+  { accessorKey: 'profit_factor', header: t('periodBreakdown.profitFactor') },
+  { accessorKey: 'wins', header: t('periodBreakdown.wins') },
+  { accessorKey: 'draws', header: t('periodBreakdown.draws') },
+  { accessorKey: 'losses', header: t('periodBreakdown.losses') },
+  { id: 'win_rate', header: t('periodBreakdown.winRate') },
 ];
 </script>
 

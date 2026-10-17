@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import ECharts from 'vue-echarts';
 import type { EChartsOption } from 'echarts';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 import { use } from 'echarts/core';
 import { format as echartsFormat } from 'echarts';
@@ -76,7 +79,7 @@ const chartOptions = computed((): EChartsOption => {
   const datazoomStart = chartData.value.length > 0 ? (1 - 50 / chartData.value.length) * 100 : 100;
   return {
     title: {
-      text: 'Trades log',
+      text: t('chartTitles.tradesLog'),
       left: 'center',
       show: props.showTitle,
     },

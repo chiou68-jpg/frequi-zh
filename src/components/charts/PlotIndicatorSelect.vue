@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 defineProps<{
   columns: string[];
   label: string;
@@ -32,6 +35,6 @@ function abort() {
       >
       </USelectMenu>
     </UFormField>
-    <UButton title="Abort" class="ms-1 mt-auto" color="neutral" icon="mdi:close" @click="abort" />
+    <UButton :title="t('plotIndicatorSelect.abort')" class="ms-1 mt-auto" color="neutral" icon="mdi:close" @click="abort" />
   </div>
 </template>

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { StrategyBacktestResult } from '@/types';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const props = defineProps<{
   backtestResult: StrategyBacktestResult;
 }>();
@@ -22,73 +24,73 @@ const backtestResultSettings = computed(() => {
   <div class="px-0 w-full">
     <div class="flex justify-center">
       <h3 class="font-bold text-2xl mb-2">
-        Backtest-result for {{ backtestResult.strategy_name }}
+        {{ t('backtestAnalysis.resultFor') }} {{ backtestResult.strategy_name }}
       </h3>
     </div>
 
     <div class="flex flex-col text-start ms-0 me-2 gap-2">
       <div class="flex flex-col xl:flex-row">
         <div class="px-0 px-xl-0 pe-xl-1 grow">
-          <DraggableContainer header="Strategy settings">
+          <DraggableContainer :header="t('backtestAnalysis.strategySettings')">
             <UTable
               :data="backtestResultSettings"
               :columns="[
-                { accessorKey: 'setting', header: 'Setting' },
-                { accessorKey: 'value', header: 'Value' },
+                { accessorKey: 'setting', header: t('backtestAnalysis.setting') },
+                { accessorKey: 'value', header: t('backtestAnalysis.value') },
               ]"
             />
           </DraggableContainer>
         </div>
         <div class="px-0 xl:px-0 pt-2 xl:pt-0 xl:ps-1 grow">
-          <DraggableContainer header="Metrics">
+          <DraggableContainer :header="t('backtestAnalysis.metrics')">
             <UTable
               :data="backtestResultStats"
               :columns="[
-                { accessorKey: 'metric', header: 'Metric' },
-                { accessorKey: 'value', header: 'Value' },
+                { accessorKey: 'metric', header: t('backtestAnalysis.metric') },
+                { accessorKey: 'value', header: t('backtestAnalysis.value') },
               ]"
             />
           </DraggableContainer>
         </div>
       </div>
       <BacktestResultTablePer
-        title="Results per Enter tag"
+        :title="t('backtestAnalysis.perEnterTag')"
         :results="backtestResult.results_per_enter_tag"
         :stake-currency="backtestResult.stake_currency"
-        key-header="Enter Tag"
+        :key-header="t('backtestAnalysis.enterTag')"
         :stake-currency-decimals="backtestResult.stake_currency_decimals"
       />
 
       <BacktestResultTablePer
-        title="Results per Exit reason"
+        :title="t('backtestAnalysis.perExitReason')"
         :results="backtestResult.exit_reason_summary ?? []"
         :stake-currency="backtestResult.stake_currency"
-        key-header="Exit Reason"
+        :key-header="t('backtestAnalysis.exitReason')"
         :stake-currency-decimals="backtestResult.stake_currency_decimals"
       />
 
       <BacktestResultTablePer
         v-if="backtestResult.mix_tag_stats"
-        title="Results Mixed Tag"
+        :title="t('backtestAnalysis.mixedTag')"
         :results="backtestResult.mix_tag_stats ?? []"
         :stake-currency="backtestResult.stake_currency"
-        :key-headers="['Enter Tag', 'Exit Tag']"
+        :key-headers="[t('backtestAnalysis.enterTag'), t('backtestAnalysis.exitTag')]"
         :stake-currency-decimals="backtestResult.stake_currency_decimals"
       />
 
       <BacktestResultTablePer
-        title="Results per pair"
+        :title="t('backtestAnalysis.perPair')"
         :results="backtestResult.results_per_pair"
         :stake-currency="backtestResult.stake_currency"
-        key-header="Pair"
+        :key-header="t('backtestAnalysis.pair')"
         :stake-currency-decimals="backtestResult.stake_currency_decimals"
       />
-      <DraggableContainer v-if="backtestResult.periodic_breakdown" header="Periodic breakdown">
+      <DraggableContainer v-if="backtestResult.periodic_breakdown" :header="t('backtestAnalysis.periodicBreakdown')">
         <BacktestResultPeriodBreakdown :periodic-breakdown="backtestResult.periodic_breakdown">
         </BacktestResultPeriodBreakdown>
       </DraggableContainer>
 
-      <DraggableContainer header="Single trades">
+      <DraggableContainer :header="t('backtestAnalysis.singleTrades')">
         <TradeList
           :trades="backtestResult.trades"
           :show-filter="true"

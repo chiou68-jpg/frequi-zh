@@ -2,7 +2,9 @@
 import type { AuthPayload, AuthStorageWithBotId } from '@/types';
 
 import { useRoute, useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const props = withDefaults(
   defineProps<{
     inModal?: boolean;
@@ -124,11 +126,10 @@ async function handleSubmit() {
     if (isApiError(error) && error.status === 401) {
       nameState.value = false;
       pwdState.value = false;
-      errorMessage.value = 'Connected to bot, however Login failed, Username or Password wrong.';
+      errorMessage.value = t('botLogin.authFailed');
     } else {
       urlState.value = false;
-      errorMessage.value = `Please verify that the bot is running, the Bot API is enabled and the URL is reachable.
-You can verify this by navigating to ${auth.value.url}/api/v1/ping to make sure the bot API is reachable`;
+      errorMessage.value = t('botLogin.urlCheck', { url: `${auth.value.url}/api/v1/ping` });
       if (auth.value.url !== window.location.origin) {
         errorMessageCORS.value = true;
       }
@@ -165,18 +166,18 @@ onMounted(() => {
 
 <template>
   <form ref="formRef" novalidate @submit.stop.prevent="handleSubmit" @reset="handleReset">
-    <UFormField class="mb-4" label="Bot Name">
+    <UFormField class="mb-4" :label="t('botLogin.botName')">
       <UInput
         v-model="auth.botName"
-        placeholder="Bot Name"
+        :placeholder="t('botLogin.botName')"
         class="mt-1 block w-full"
         @keydown.enter="handleOk"
       />
     </UFormField>
     <UFormField
       class="mb-4"
-      label="API Url"
-      :error="urlState === false ? 'API URL is required.' : undefined"
+      :label="t('botLogin.apiUrl')"
+      :error="urlState === false ? t('botLogin.urlRequired') : undefined"
     >
       <UInput
         id="url-input"
@@ -190,27 +191,27 @@ onMounted(() => {
         v-if="urlDuplicate"
         class="mt-2"
         color="warning"
-        title="This URL is already in use by another bot."
+        :title="t('botLogin.urlDuplicate')"
       >
       </UAlert>
     </UFormField>
     <UFormField
       class="mb-4"
-      label="Username"
-      :error="nameState === false ? 'Name and Password are required.' : undefined"
+      :label="t('botLogin.username')"
+      :error="nameState === false ? t('botLogin.credentialsRequired') : undefined"
     >
       <UInput
         v-model="auth.username"
         required
-        placeholder="Freqtrader"
+        :placeholder="t('botLogin.usernamePlaceholder')"
         class="w-full"
         @keydown.enter="handleOk"
       />
     </UFormField>
     <UFormField
       class="mb-4"
-      label="Password"
-      :error="pwdState === false ? 'Invalid Password' : undefined"
+      :label="t('botLogin.password')"
+      :error="pwdState === false ? t('botLogin.invalidPassword') : undefined"
     >
       <UInput
         v-model="auth.password"
@@ -225,31 +226,31 @@ onMounted(() => {
         v-if="errorMessage"
         class="mt-2 whitespace-pre-line"
         color="warning"
-        title="Login failed"
+        :title="t('botLogin.loginFailed')"
       >
         <template #description>
           {{ errorMessage }}
           <span v-if="errorMessageCORS">
-            Please also check your bot's CORS configuration:
+            {{ t('botLogin.corsCheck') }}
             <a
               href="https://www.freqtrade.io/en/latest/rest-api/#cors"
               class="text-blue-500 underline"
-              >Freqtrade CORS documentation</a
+              >{{ t('botLogin.corsDocs') }}</a
             >
           </span>
         </template>
       </UAlert>
     </div>
     <div class="flex justify-end gap-2 mt-4">
-      <UButton label="Reset" color="error" type="reset" />
+      <UButton :label="t('botLogin.reset')" color="error" type="reset" />
       <UButton
         v-if="inModal"
-        label="Cancel"
+        :label="t('botLogin.cancel')"
         color="neutral"
         type="button"
         @click="emitLoginResult(true)"
       />
-      <UButton label="Submit" color="primary" type="submit" icon="mdi:login" />
+      <UButton :label="t('botLogin.submit')" color="primary" type="submit" icon="mdi:login" />
     </div>
   </form>
 </template>

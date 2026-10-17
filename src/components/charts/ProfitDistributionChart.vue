@@ -14,7 +14,9 @@ import {
 } from 'echarts/components';
 
 import type { ClosedTrade } from '@/types';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 use([
   BarChart,
 
@@ -61,7 +63,7 @@ const data = computed(() => {
 const chartOptions = computed((): EChartsOption => {
   const chartOptionsLoc: EChartsOption = {
     title: {
-      text: 'Profit distribution',
+      text: t('chartTitles.profitDistribution'),
       left: 'center',
       show: props.showTitle,
     },
@@ -135,7 +137,7 @@ const chartOptions = computed((): EChartsOption => {
       class="z-2 absolute fixed-top flex items-center gap-10 ms-2 mt-1"
       :class="{ 'mx-auto': showTitle }"
       label-for="input-bins"
-      label="Bins"
+      :label="t('profitDistribution.bins')"
       orientation="horizontal"
     >
       <USelect

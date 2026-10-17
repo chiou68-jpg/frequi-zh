@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import ECharts from 'vue-echarts';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 import { use } from 'echarts/core';
 import { format as echartsFormat } from 'echarts';
@@ -239,7 +242,7 @@ const walletHistoryOptions: ComputedRef<EChartsOption> = computed(() => {
 
   const option: EChartsOption = {
     title: {
-      text: 'Wallet Balance',
+      text: t('chartTitles.walletBalance'),
       left: 'center',
       show: props.showTitle,
     },

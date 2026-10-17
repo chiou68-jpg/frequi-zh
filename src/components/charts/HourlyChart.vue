@@ -1,6 +1,9 @@
 <script setup lang="ts">
 // TODO: is this component used?!?
 import ECharts from 'vue-echarts';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 import type { Trade } from '@/types';
 import type { EChartsOption } from 'echarts';
@@ -66,7 +69,7 @@ const hourlyData = computed(() => {
 const hourlyChartOptions = computed((): EChartsOption => {
   return {
     title: {
-      text: 'Hourly Profit',
+      text: t('chartTitles.hourlyProfit'),
       show: props.showTitle,
     },
     backgroundColor: 'rgba(0, 0, 0, 0)',

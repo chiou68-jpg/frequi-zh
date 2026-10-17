@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { IndicatorConfig, PlotConfig } from '@/types';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const props = withDefaults(
   defineProps<{
     columns: string[];
@@ -48,7 +50,7 @@ const usedColumns = computed((): { label: string; value: string }[] => {
   }
   return usedCols.map((col) => ({
     value: col,
-    label: !props.columns.includes(col) ? `${col} <-- not available in this chart` : col,
+    label: !props.columns.includes(col) ? `${col} <-- ${t('plotConfig.notAvailable')}` : col,
   }));
 });
 
@@ -176,7 +178,7 @@ function loadConfigFromString() {
 
 async function loadPlotConfigFromStrategy() {
   if (botStore.activeBot.isWebserverMode && !botStore.activeBot.strategy?.strategy) {
-    showAlert(`No strategy selected, can't load plot config.`);
+    showAlert(t('plotConfig.noStrategy'));
     return;
   }
   try {
@@ -186,7 +188,7 @@ async function loadPlotConfigFromStrategy() {
     }
   } catch (error) {
     //
-    showAlert('Failed to load Plot configuration from Strategy.');
+    showAlert(t('plotConfig.loadFailed'));
   }
 }
 
@@ -265,19 +267,19 @@ const markAreaZIndex = computed({
 
 <template>
   <div v-if="columns">
-    <UFormField label="Plot config name" class="text-md">
+    <UFormField :label="t('plotConfig.name')" class="text-md">
       <PlotConfigSelect allow-edit></PlotConfigSelect>
     </UFormField>
     <USeparator class="my-2" />
-    <BaseCheckbox v-model="showTagsInTooltips" class="mb-1">Show Tags in Tooltips</BaseCheckbox>
+    <BaseCheckbox v-model="showTagsInTooltips" class="mb-1">{{ t('plotConfig.showTags') }}</BaseCheckbox>
     <div class="grid grid-cols-2 items-center gap-2 w-full">
-      <label>Mark Area Z-Index <br /><small>(defaults to 1 - Candlechart is at Z=2)</small></label>
+      <label>{{ t('plotConfig.markAreaZIndex') }} <br /><small>{{ t('plotConfig.markAreaZIndexHint') }}</small></label>
 
       <UInputNumber v-model="markAreaZIndex" class="mb-1" />
     </div>
     <USeparator class="my-2" />
 
-    <UFormField label="Target Plot" class="text-md">
+    <UFormField :label="t('plotConfig.targetPlot')" class="text-md">
       <EditValue
         v-model="selSubPlot"
         :allow-edit="!isMainPlot"
@@ -303,35 +305,35 @@ const markAreaZIndex = computed({
       </EditValue>
     </UFormField>
     <USeparator class="my-2" />
-    <UFormField label="Indicators in this plot" class="text-md">
+    <UFormField :label="t('plotConfig.indicatorsInPlot')" class="text-md">
       <UListbox v-model="selIndicatorName" value-key="value" :items="usedColumns"> </UListbox>
     </UFormField>
     <div class="flex flex-row mt-1 gap-1">
       <UButton
         color="neutral"
-        title="Remove indicator to plot"
+        :title="t('plotConfig.removeIndicatorTitle')"
         :disabled="!selIndicatorName"
         class="col"
         @click="removeIndicator"
-        label="Remove indicator"
+        :label="t('plotConfig.removeIndicator')"
         icon="mdi:minus-box-outline"
       />
 
       <UButton
         color="neutral"
-        title="Load indicator config from template"
+        :title="t('plotConfig.fromTemplateTitle')"
         @click="fromPlotTemplateVisible = !fromPlotTemplateVisible"
-        label="From template"
+        :label="t('plotConfig.fromTemplate')"
         icon="mdi:folder-arrow-down-outline"
       />
 
       <UButton
-        title="Add indicator to plot"
+        :title="t('plotConfig.addIndicatorTitle')"
         icon="mdi:plus-box-outline"
         class="col"
         :disabled="addNewIndicator"
         @click="clickAddNewIndicator"
-        label="Add indicator"
+        :label="t('plotConfig.addIndicator')"
       />
     </div>
 
@@ -339,7 +341,7 @@ const markAreaZIndex = computed({
       v-if="addNewIndicator"
       :columns="columns"
       class="mt-1"
-      label="Select indicator to add"
+      :label="t('plotConfig.selectIndicatorToAdd')"
       @indicator-selected="addNewIndicatorSelected"
     />
 
@@ -357,9 +359,9 @@ const markAreaZIndex = computed({
       <UButton
         color="neutral"
         :disabled="addNewIndicator"
-        title="Reset to last saved configuration"
+        :title="t('plotConfig.resetTitle')"
         @click="loadPlotConfig"
-        label="Reset"
+        :label="t('plotConfig.reset')"
         icon="mdi:restore"
       />
 
@@ -381,7 +383,7 @@ const markAreaZIndex = computed({
           addNewIndicator
         "
         color="neutral"
-        label="From strategy"
+        :label="t('plotConfig.fromStrategy')"
         icon="mdi:download"
         @click="loadPlotConfigFromStrategy"
       />
@@ -390,18 +392,18 @@ const markAreaZIndex = computed({
         id="showButton"
         color="neutral"
         :disabled="addNewIndicator"
-        title="Show configuration for easy transfer to a strategy"
+        :title="t('plotConfig.showConfigTitle')"
         @click="showConfig = !showConfig"
         :icon="showConfig ? 'mdi:eye-off' : 'mdi:eye'"
-        :label="showConfig ? 'Hide' : 'Show'"
+        :label="showConfig ? t('plotConfig.hide') : t('plotConfig.show')"
       />
 
       <UButton
         data-toggle="tooltip"
         :disabled="addNewIndicator"
-        title="Save configuration"
+        :title="t('plotConfig.saveTitle')"
         @click="savePlotConfig"
-        label="Save"
+        :label="t('plotConfig.save')"
         variant="solid"
         icon="mdi:content-save"
       />
@@ -411,10 +413,10 @@ const markAreaZIndex = computed({
       class="mt-1"
       color="neutral"
       size="sm"
-      title="Load configuration from text box below"
+      :title="t('plotConfig.loadFromStringTitle')"
       @click="loadConfigFromString"
       icon="mdi:upload"
-      >Load from string below</UButton
+      >{{ t('plotConfig.loadFromString') }}</UButton
     >
     <div v-if="showConfig" class="w-full ms-1 mt-2">
       <UTextarea

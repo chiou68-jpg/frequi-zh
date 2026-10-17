@@ -2,7 +2,9 @@
 import type { DownloadDataPayload, ExchangeSelection } from '@/types';
 import { MarginMode, TradingMode } from '@/types';
 import type { SelectMenuItem } from '@nuxt/ui';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const botStore = useBotStore();
 const pairlistStore = usePairlistConfigStore();
 const pairs = ref<string[]>(['BTC/USDT', 'ETH/USDT', '']);
@@ -40,12 +42,12 @@ const advancedOptions = ref({
 // State to track the collapse status
 const isAdvancedOpen = ref(false);
 const candleTypes: SelectMenuItem[] = [
-  { label: 'Spot', value: 'spot' },
-  { label: 'Futures', value: 'futures' },
-  { label: 'Funding Rate', value: 'funding_rate' },
-  { label: 'Mark', value: 'mark' },
-  { label: 'Index', value: 'index' },
-  { label: 'Premium Index', value: 'premiumIndex' },
+  { label: t('downloadData.spot'), value: 'spot' },
+  { label: t('downloadData.futures'), value: 'futures' },
+  { label: t('downloadData.fundingRate'), value: 'funding_rate' },
+  { label: t('downloadData.mark'), value: 'mark' },
+  { label: t('downloadData.index'), value: 'index' },
+  { label: t('downloadData.premiumIndex'), value: 'premiumIndex' },
 ];
 
 function addPairs(_pairs: string[]) {
@@ -97,7 +99,7 @@ async function startDownload() {
 <template>
   <div class="px-1 mx-auto w-full max-w-4xl lg:max-w-7xl">
     <BackgroundJobTracking class="mb-4" />
-    <DraggableContainer header="Downloading Data" class="mx-1 p-4">
+    <DraggableContainer :header="t('downloadData.title')" class="mx-1 p-4">
       <div class="flex mb-3 gap-3 flex-col">
         <div class="flex flex-col gap-3">
           <div class="flex flex-col lg:flex-row gap-3">
@@ -105,11 +107,11 @@ async function startDownload() {
             <div class="flex-fill">
               <div class="flex flex-col gap-2">
                 <div class="flex justify-between">
-                  <h4 class="text-start font-bold text-lg">Select Pairs</h4>
-                  <h5 class="text-start font-bold text-lg">Pairs from template</h5>
+                  <h4 class="text-start font-bold text-lg">{{ t('downloadData.selectPairs') }}</h4>
+                  <h5 class="text-start font-bold text-lg">{{ t('downloadData.pairsFromTemplate') }}</h5>
                 </div>
                 <div class="flex gap-2">
-                  <BaseStringList v-model="pairs" placeholder="Pair" class="grow" />
+                  <BaseStringList v-model="pairs" :placeholder="t('downloadData.pair')" class="grow" />
                   <div class="flex flex-col gap-1">
                     <div class="flex flex-col gap-1">
                       <UButton
@@ -125,11 +127,11 @@ async function startDownload() {
                     <USeparator />
                     <UButton
                       :disabled="pairlistStore.whitelist.length === 0"
-                      title="Add all pairs from Pairlist Config - requires the pairlist config to have ran first."
+                      :title="t('downloadData.pairlistConfigTitle')"
                       color="neutral"
                       @click="replacePairs(pairlistStore.whitelist)"
                     >
-                      Use Pairs from Pairlist Config
+                      {{ t('downloadData.usePairlistConfig') }}
                     </UButton>
                   </div>
                 </div>
@@ -139,8 +141,8 @@ async function startDownload() {
             <!-- Timeframes section -->
             <div class="flex-fill px-3">
               <div class="flex flex-col gap-2">
-                <h4 class="text-start font-bold text-lg">Select timeframes</h4>
-                <BaseStringList v-model="timeframes" placeholder="Timeframe" />
+                <h4 class="text-start font-bold text-lg">{{ t('downloadData.selectTimeframes') }}</h4>
+                <BaseStringList v-model="timeframes" :placeholder="t('downloadData.timeframe')" />
               </div>
             </div>
           </div>
@@ -149,9 +151,9 @@ async function startDownload() {
           <div class="px-3 border dark:border-neutral-700 border-neutral-300 p-2 rounded-sm">
             <div class="flex flex-col gap-2">
               <div class="flex justify-between items-center">
-                <h4 class="text-start mb-0 font-bold text-lg">Time Selection</h4>
+                <h4 class="text-start mb-0 font-bold text-lg">{{ t('downloadData.timeSelection') }}</h4>
                 <BaseCheckbox v-model="timeSelection.useCustomTimerange" class="mb-0" switch>
-                  Use custom timerange
+                  {{ t('downloadData.useCustomTimerange') }}
                 </BaseCheckbox>
               </div>
 
@@ -162,10 +164,10 @@ async function startDownload() {
                 />
               </div>
               <div v-else class="flex items-center gap-2">
-                <label>Days to download:</label>
+                <label>{{ t('downloadData.daysToDownload') }}:</label>
                 <UInputNumber
                   v-model="timeSelection.days"
-                  aria-label="Days to download"
+                  :aria-label="t('downloadData.daysToDownload')"
                   :min="1"
                   :step="1"
                 />
@@ -173,27 +175,26 @@ async function startDownload() {
             </div>
           </div>
           <!-- Advanced options section -->
-          <BaseCollapsible title="Advanced options" v-model:open="isAdvancedOpen">
+          <BaseCollapsible :title="t('downloadData.advancedOptions')" v-model:open="isAdvancedOpen">
             <UAlert
               color="info"
               class="my-2 py-2"
-              description="Advanced options (Erase data, Download trades, and Custom Exchange settings) will only
-              be applied when this section is expanded."
+              :description="t('downloadData.advancedHint')"
             />
             <div
               class="mb-2 border dark:border-neutral-700 border-neutral-300 rounded-md p-2 text-start"
             >
               <BaseCheckbox v-model="advancedOptions.erase" class="mb-2"
-                >Erase existing data</BaseCheckbox
+                >{{ t('downloadData.eraseData') }}</BaseCheckbox
               >
               <BaseCheckbox
                 v-model="advancedOptions.prepend_data"
                 class="mb-2"
                 v-if="botStore.activeBot.botFeatures.downloadDataPrepend"
-                >Prepend data when downloading</BaseCheckbox
+                >{{ t('downloadData.prependData') }}</BaseCheckbox
               >
               <BaseCheckbox v-model="advancedOptions.downloadTrades" class="mb-2">
-                Download Trades instead of OHLCV data
+                {{ t('downloadData.downloadTrades') }}
               </BaseCheckbox>
               <div class="grid grid-cols md:grid-cols-2 items-center gap-2">
                 <USelectMenu
@@ -201,12 +202,11 @@ async function startDownload() {
                   v-if="botStore.activeBot.botFeatures.downloadDataCandleTypes"
                   v-model="advancedOptions.candleTypes"
                   :items="candleTypes"
-                  placeholder="Select Candle Types"
+                  :placeholder="t('downloadData.selectCandleTypes')"
                   value-key="value"
                 />
                 <small
-                  >When no candle-type is selected, freqtrade will download the necessary candle
-                  types for regular operation automatically.</small
+                  >{{ t('downloadData.candleTypesHint') }}</small
                 >
               </div>
             </div>
@@ -215,7 +215,7 @@ async function startDownload() {
             >
               <UCollapsible v-model:open="exchange.customExchange">
                 <BaseCheckbox v-model="exchange.customExchange" class="mb-2">
-                  Custom Exchange
+                  {{ t('downloadData.customExchange') }}
                 </BaseCheckbox>
                 <template #content>
                   <ExchangeSelect
@@ -229,7 +229,7 @@ async function startDownload() {
 
           <div class="px-3">
             <UButton variant="solid" icon="mdi:download" @click="startDownload"
-              >Start Download</UButton
+              >{{ t('downloadData.startDownload') }}</UButton
             >
           </div>
         </div>

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { ExitReasonResults, PairResult } from '@/types';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 type ResultsType = PairResult | ExitReasonResults;
 type ResultsTypeWithKey = ResultsType & { key?: string | string[] };
 const props = withDefaults(
@@ -80,25 +82,25 @@ const tableColumns = computed(() => {
   });
 
   // Fixed metric columns
-  cols.push({ accessorKey: 'trades', header: 'Trades' });
+  cols.push({ accessorKey: 'trades', header: t('backtestTablePer.trades') });
   cols.push({
     id: 'profit_mean',
-    header: 'Avg Profit %',
+    header: t('backtestTablePer.avgProfit'),
     cell: ({ row }) => formatPercent(row.original.profit_mean, 2),
   });
   cols.push({
     id: 'profit_total_abs',
-    header: `Tot Profit ${props.stakeCurrency}`,
+    header: t('backtestTablePer.totProfitCurrency', { currency: props.stakeCurrency }),
     cell: ({ row }) => formatPrice(row.original.profit_total_abs, props.stakeCurrencyDecimals),
   });
   cols.push({
     id: 'profit_total',
-    header: 'Tot Profit %',
+    header: t('backtestTablePer.totProfitPct'),
     cell: ({ row }) => formatPercent(row.original.profit_total, 2),
   });
-  cols.push({ accessorKey: 'wins', header: 'Wins' });
-  cols.push({ accessorKey: 'draws', header: 'Draws' });
-  cols.push({ accessorKey: 'losses', header: 'Losses' });
+  cols.push({ accessorKey: 'wins', header: t('backtestTablePer.wins') });
+  cols.push({ accessorKey: 'draws', header: t('backtestTablePer.draws') });
+  cols.push({ accessorKey: 'losses', header: t('backtestTablePer.losses') });
 
   // Dynamic additional metric columns
   metrics.value.forEach((col) => {
@@ -121,7 +123,7 @@ const tableColumns = computed(() => {
       <div class="flex flex-row w-full justify-between items-center text-">
         {{ title }}
         <div>
-          Shown metrics:
+          {{ t('backtestTablePer.shownMetrics') }}:
           <USelectMenu
             multiple
             id="backtestMetrics"
