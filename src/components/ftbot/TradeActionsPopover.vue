@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import type { Trade } from '@/types';
 import type { BotFeatures } from '@/types/features';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 withDefaults(
   defineProps<{
     trade: Trade;
@@ -53,7 +55,7 @@ function handleForceEntry(item: Trade) {
   <div>
     <UPopover
       :target="`btn-actions-${id}`"
-      :title="`Actions for ${trade.pair}`"
+      :title="t('tradeActionsPopover.actionsFor', { pair: trade.pair })"
       v-model:open="popoverOpen"
       triggers="manual"
       placement="left"
@@ -63,7 +65,7 @@ function handleForceEntry(item: Trade) {
         class="btn-xs"
         size="sm"
         color="neutral"
-        title="Actions"
+        :title="t('tradeActionsPopover.actions')"
         icon="mdi:gesture-tap"
       />
       <template #content>
@@ -82,7 +84,7 @@ function handleForceEntry(item: Trade) {
           <UButton
             class="mt-1 w-full text-start"
             color="neutral"
-            label="Close Actions menu"
+            :label="t('tradeActionsPopover.closeMenu')"
             icon="mdi:cancel"
             @click="popoverOpen = false"
           />

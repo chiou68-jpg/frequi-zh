@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import type { BotDescriptor } from '@/types';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 const { confirm } = useConfirmBox();
 
 const props = defineProps<{
@@ -20,8 +23,8 @@ function confirmRemoveBot() {
 async function removeBotQuestion() {
   if (
     await confirm({
-      title: 'Logout confirmation',
-      message: `Really remove (logout) from ${props.bot.botName} (${props.bot.botId})?`,
+      title: t('botEntry.logoutConfirm'),
+      message: t('botEntry.logoutMsg', { name: props.bot.botName, id: props.bot.botId }),
     })
   ) {
     confirmRemoveBot();
@@ -52,18 +55,18 @@ const autoRefreshLoc = computed({
           v-if="!noRefreshSwitch"
           v-model="autoRefreshLoc"
           class="mr-2"
-          :title="`Auto refresh for ${bot.botName || bot.botId}`"
+          :title="t('botEntry.autoRefresh', { name: bot.botName || bot.botId })"
         />
         <div
           v-if="selectedBotStore.isBotLoggedIn"
-          :title="selectedBotStore.isBotOnline ? 'Online' : 'Offline'"
+          :title="selectedBotStore.isBotOnline ? t('botEntry.online') : t('botEntry.offline')"
         >
           <i-mdi-circle
             class="mx-1"
             :class="selectedBotStore.isBotOnline ? 'text-green-500' : 'text-red-500'"
           />
         </div>
-        <div v-else title="Login info expired, please login again.">
+        <div v-else :title="t('botEntry.loginExpired')">
           <i-mdi-cancel class="text-red-500 mx-1" />
         </div>
       </div>
@@ -73,7 +76,7 @@ const autoRefreshLoc = computed({
           v-if="!noButtons && selectedBotStore.isBotLoggedIn"
           color="neutral"
           variant="soft"
-          title="Edit bot"
+          :title="t('botEntry.editBot')"
           @click="$emit('edit', bot.botId)"
           icon="mdi:pencil"
         />
@@ -81,7 +84,7 @@ const autoRefreshLoc = computed({
           v-if="!noRefreshSwitch && !selectedBotStore.isBotLoggedIn"
           variant="soft"
           color="neutral"
-          title="Login again"
+          :title="t('botEntry.loginAgain')"
           @click="$emit('editLogin', bot.botId)"
           icon="mdi:login"
         />
@@ -89,7 +92,7 @@ const autoRefreshLoc = computed({
           v-if="!noButtons"
           variant="soft"
           color="neutral"
-          title="Delete bot"
+          :title="t('botEntry.deleteBot')"
           @click="removeBotQuestion"
           icon="mdi:delete"
         />

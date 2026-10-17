@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { Trade } from '@/types';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const props = withDefaults(
   defineProps<{
     trades: Trade[];
@@ -17,8 +19,8 @@ const selectedTrade = ref({} as Trade);
 const sortDescendingOrder = ref(true);
 const sortMethod = ref('openDate');
 const sortMethodOptions = [
-  { text: 'Open date', value: 'openDate' },
-  { text: 'Profit %', value: 'profit' },
+  { text: t('tradeListNav.openDate'), value: 'openDate' },
+  { text: t('tradeListNav.profitPct'), value: 'profit' },
 ];
 
 const onTradeSelect = (trade: Trade) => {
@@ -46,7 +48,7 @@ watch(
 <template>
   <div>
     <div class="flex justify-center">
-      <span class="me-2">Sort by:</span>
+      <span class="me-2">{{ t('tradeListNav.sortBy') }}:</span>
       <URadioGroup
         v-model="sortMethod"
         :items="sortMethodOptions.map((o) => ({ label: o.text, value: o.value }))"
@@ -60,10 +62,10 @@ watch(
         color="neutral"
         variant="ghost"
         class="w-full justify-center"
-        :title="'Trade Navigation'"
+        :title="t('tradeListNav.title')"
         @click="sortDescendingOrder = !sortDescendingOrder"
         :trailing-icon="sortDescendingOrder ? 'mdi:arrow-down' : 'mdi:arrow-up'"
-        >Trade Navigation
+        >{{ t('tradeListNav.title') }}
       </UButton>
       <li
         v-for="(trade, i) in sortedTrades"
@@ -112,7 +114,7 @@ watch(
           </div>
         </Transition>
       </li>
-      <div v-if="trades.length === 0">No trades to show...</div>
+      <div v-if="trades.length === 0">{{ t('tradeListNav.noTrades') }}</div>
     </ul>
   </div>
 </template>
