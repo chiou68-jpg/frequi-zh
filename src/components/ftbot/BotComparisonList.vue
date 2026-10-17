@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import type { ComparisonTableItems } from '@/types';
 import type { TableColumn } from '@nuxt/ui';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const botStore = useBotStore();
 
 const allToggled = computed<boolean>({
@@ -17,7 +19,7 @@ const tableItems = computed<ComparisonTableItems[]>(() => {
   const val: ComparisonTableItems[] = [];
   const summary: ComparisonTableItems = {
     botId: undefined,
-    botName: 'Summary',
+    botName: t('comparison.summary'),
     profitClosed: 0,
     profitClosedRatio: undefined,
     profitOpen: 0,
@@ -99,11 +101,11 @@ const tableItems = computed<ComparisonTableItems[]>(() => {
 
 const columns: TableColumn<ComparisonTableItems>[] = [
   { accessorKey: 'botName' },
-  { accessorKey: 'trades', header: 'Trades' },
-  { id: 'profitOpen', header: 'Open Profit' },
-  { id: 'profitClosed', header: 'Closed Profit' },
-  { accessorKey: 'balance', header: 'Balance' },
-  { id: 'winVsLoss', header: 'W/L' },
+  { accessorKey: 'trades', header: t('comparison.trades') },
+  { id: 'profitOpen', header: t('comparison.openProfit') },
+  { id: 'profitClosed', header: t('comparison.closedProfit') },
+  { accessorKey: 'balance', header: t('comparison.balance') },
+  { id: 'winVsLoss', header: t('comparison.wl') },
 ];
 </script>
 
@@ -111,13 +113,13 @@ const columns: TableColumn<ComparisonTableItems>[] = [
   <UTable :data="tableItems" :columns="columns">
     <template #botName-header>
       <div class="flex justify-between flex-row w-full">
-        <b>Bot Name</b
+        <b>{{ t('comparison.botName') }}</b
         ><UBadge
           class="items-center text-slate-200 bg-slate-800 cursor-pointer"
           color="neutral"
-          title="Click to select all bots"
+          :title="t('comparison.selectAll')"
           @click="botStore.toggleBotsByState('all')"
-          >All</UBadge
+          >{{ t('comparison.all') }}</UBadge
         >
       </div>
     </template>
@@ -130,13 +132,13 @@ const columns: TableColumn<ComparisonTableItems>[] = [
               botStore.botStores[(row.original as unknown as ComparisonTableItems).botId!]!
                 .isSelected
             "
-            title="Show this bot in Dashboard"
+            :title="t('comparison.showInDashboard')"
             >{{ row.original.botName }}</BaseCheckbox
           >
           <BaseCheckbox
             v-if="!row.original.botId && botStore.botCount > 1"
             v-model="allToggled"
-            title="Toggle all bots"
+            :title="t('comparison.toggleAll')"
             class="font-bold"
             >{{ row.original.botName }}</BaseCheckbox
           >
@@ -146,30 +148,30 @@ const columns: TableColumn<ComparisonTableItems>[] = [
           v-if="row.original.isLoggedIn === false"
           class="items-center"
           color="error"
-          label="Needs login"
+          :label="t('comparison.needsLogin')"
         />
         <UBadge
           v-else-if="row.original.isLoggedIn && row.original.isOnline === false"
           class="items-center"
           color="neutral"
-          label="Offline"
+          :label="t('comparison.offline')"
         />
         <template v-else>
           <UBadge
             v-if="row.original.isOnline && row.original.isDryRun"
             class="items-center bg-green-800 text-slate-200 cursor-pointer"
             color="success"
-            title="Click to select all dry run bots"
+            :title="t('comparison.selectDry')"
             @click="botStore.toggleBotsByState('dry')"
-            label="Dry"
+            :label="t('comparison.dry')"
           />
           <UBadge
             v-if="row.original.isOnline && !row.original.isDryRun"
             class="items-center cursor-pointer"
             color="warning"
-            title="Click to select all live bots"
+            :title="t('comparison.selectLive')"
             @click="botStore.toggleBotsByState('live')"
-            label="Live"
+            :label="t('comparison.live')"
           />
         </template>
       </div>
@@ -179,9 +181,7 @@ const columns: TableColumn<ComparisonTableItems>[] = [
         v-if="row.original.profitOpen && row.original.botId !== 'Summary'"
         :profit-ratio="row.original.profitOpenRatio"
         :profit-abs="row.original.profitOpen"
-        :profit-desc="`Total Profit (Open and realized) ${formatPercent(
-          row.original.profitOpenRatio ?? 0.0,
-        )}`"
+        :profit-desc="t('comparison.totalProfitDesc', { pct: formatPercent(row.original.profitOpenRatio ?? 0.0) })"
         :stake-currency="row.original.stakeCurrency"
       />
     </template>

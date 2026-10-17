@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { Trade } from '@/types';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const props = withDefaults(
   defineProps<{
     trades: Trade[];
@@ -60,7 +62,7 @@ const tradeClick = (trade) => {
         :items-per-page="perPage"
         aria-controls="tradeList"
       />
-      <UInput v-if="showFilter" v-model="filterText" type="text" placeholder="Filter" />
+      <UInput v-if="showFilter" v-model="filterText" type="text" :placeholder="t('common.filter')" />
     </div>
   </div>
 </template>

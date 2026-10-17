@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 const botStore = useBotStore();
 const scrollContainer = ref<HTMLElement | null>(null);
 
@@ -49,13 +52,13 @@ function scrollToBottom() {
         id="refresh-logs"
         color="neutral"
         size="sm"
-        title="Reload Logs"
+        :title="t('logs.reload')"
         @click="refreshLogs"
         icon="mdi:refresh"
       />
       <UButton
         size="sm"
-        title="Scroll to bottom"
+        :title="t('logs.scrollBottom')"
         color="neutral"
         @click="scrollToBottom"
         icon="mdi:arrow-down-thick"

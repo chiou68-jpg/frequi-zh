@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { TimeSummaryOptions } from '@/types';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const botStore = useBotStore();
 const settingsStore = useSettingsStore();
 
@@ -13,17 +15,17 @@ const hasWeekly = computed(
 );
 
 const periodicBreakdownSelections = computed(() => {
-  const vals = [{ value: TimeSummaryOptions.daily, text: 'Days' }];
+  const vals = [{ value: TimeSummaryOptions.daily, text: t('period.days') }];
   if (hasWeekly.value) {
-    vals.push({ value: TimeSummaryOptions.weekly, text: 'Weeks' });
-    vals.push({ value: TimeSummaryOptions.monthly, text: 'Months' });
+    vals.push({ value: TimeSummaryOptions.weekly, text: t('period.weeks') });
+    vals.push({ value: TimeSummaryOptions.monthly, text: t('period.months') });
   }
   return vals;
 });
 
 const absRelSelections = ref([
-  { value: 'abs_profit', text: 'Abs $' },
-  { value: 'rel_profit', text: 'Rel %' },
+  { value: 'abs_profit', text: t('period.abs') },
+  { value: 'rel_profit', text: t('period.rel') },
 ]);
 
 const selectedStats = computed(() => {
@@ -72,16 +74,16 @@ onMounted(() => {
 
 const tableColumns = computed(() => {
   const cols: { accessorKey: string; header: string }[] = [
-    { accessorKey: 'date', header: 'Day' },
-    { accessorKey: 'abs_profit', header: 'Profit' },
+    { accessorKey: 'date', header: t('period.day') },
+    { accessorKey: 'abs_profit', header: t('period.profit') },
     {
       accessorKey: 'fiat_value',
-      header: `In ${selectedStats.value.fiat_display_currency}`,
+      header: t('period.inFiat', { currency: selectedStats.value.fiat_display_currency }),
     },
-    { accessorKey: 'trade_count', header: 'Trades' },
+    { accessorKey: 'trade_count', header: t('period.trades') },
   ];
   if (botStore.activeBot.botFeatures.advancedDailyMetrics) {
-    cols.push({ accessorKey: 'rel_profit', header: 'Profit%' });
+    cols.push({ accessorKey: 'rel_profit', header: t('period.profitPct') });
   }
   return cols;
 });
@@ -97,7 +99,7 @@ watch(
 <template>
   <div class="flex flex-col h-full">
     <div v-if="!props.multiBotView" class="mb-2">
-      <h3 class="me-auto inline text-xl">{{ hasWeekly ? 'Period' : 'Daily' }} Breakdown</h3>
+      <h3 class="me-auto inline text-xl">{{ hasWeekly ? t('period.periodBreakdown') : t('period.dailyBreakdown') }}</h3>
       <UButton class="float-end" color="neutral" icon="mdi:refresh" @click="refreshSummary" />
     </div>
     <div class="flex align-center justify-between">
@@ -136,13 +138,12 @@ watch(
       />
     </div>
     <div v-else class="flex items-center justify-center h-full w-full p-2">
-      Time period chart is only available when a single bot is selected and showing absolute profit.
+      {{ t('period.singleBotOnly') }}
     </div>
     <div v-if="!props.multiBotView">
       <UTable
         :data="selectedStats.data"
-        :columns="tableColumns"
-        :ui="{
+        :columns="tableColumns"        :ui="{
           td: 'whitespace-normal',
         }"
       >

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { Lock, Trade } from '@/types';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 interface CombinedPairList {
   pair: string;
   lockReason: string;
@@ -117,7 +119,7 @@ const combinedPairList = computed(() => {
         id="trade-filter"
         v-model="filterText"
         type="text"
-        placeholder="Filter"
+        :placeholder="t('common.filter')"
         class="w-full"
       />
     </div>
