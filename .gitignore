@@ -42,3 +42,5 @@ yarn-error.log*
 # Source maps & temp (localization fork)
 *.map
 _tmp*
+
+.github/
