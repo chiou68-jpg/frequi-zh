@@ -130,6 +130,11 @@ const navItems = computed<NavItem[]>(() => [
     icon: 'i-mdi-format-list-bulleted',
   },
   {
+    label: t('nav.system'),
+    to: '/system',
+    icon: 'i-mdi-server',
+  },
+  {
     label: t('nav.settings'),
     to: '/settings',
     mobileOnly: true,
